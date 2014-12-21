@@ -1,0 +1,62 @@
+﻿@model LinkedList<Tuple<SortedDictionary<String, double>, double>>
+
+@using System.Text;
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div> 
+        <!--Count is Model.Count -->
+      
+      @if (Model.Count > 0){
+            @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
+            @Html.Raw("<mo>&#123;</mo>   <!--curly brace-->  <mtable>");
+            }
+            @foreach (Tuple<SortedDictionary<String, double>, double> equation in Model) {  
+                @Html.Raw("<mtr><mtd>");
+                bool emitFirstSign = true;
+                foreach (KeyValuePair<string, double> kv in equation.Item1) {
+                             if (kv.Value >= 0) {
+                                if (!emitFirstSign){
+                                    @Html.Raw("<mo>&#43;<!--PLUS--></mo>");
+                                }
+                             } else {
+                                @Html.Raw("<mo>&#45;<!--MINU--></mo>");
+                             }
+                             emitFirstSign = false;
+                             @Html.Raw("<mn>" + (Math.Abs(kv.Value)) + "</mn>");
+                             @Html.Raw("<mi>" + kv.Key + "</mi>");
+                            }
+
+                @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
+                @Html.Raw("<mn>" + (equation.Item2) + "</mn>");
+                @Html.Raw("</mtr></mtd>");
+                        }
+            
+            
+            @if (Model.Count > 0){
+                @Html.Raw("</mtable>");
+                @Html.Raw("</math>");
+              }
+        
+</div>
+    <div>
+        <br />
+        <br />
+        qweqwe
+
+    </div>
+</body>
+</html>
