@@ -37,7 +37,7 @@ namespace WebApplication1.Controllers
         // GET: http://localhost:49168/Sle?parseMe=2n%3D3
         public  ActionResult Index(String parseMe)
         {
-            if (parseMe == null) {
+            if (String.IsNullOrEmpty(parseMe)) {
                 return View(getSystem());
             }
             try { 

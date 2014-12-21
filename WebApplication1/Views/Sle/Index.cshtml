@@ -56,6 +56,10 @@
         <br />
         <br />
         qweqwe
+        @using (Html.BeginForm("Index","Sle",FormMethod.Post)){
+            <input type="text" name="parseMe"/>
+            <input type="submit" value="Add equation" />
+        }
 
     </div>
 </body>
