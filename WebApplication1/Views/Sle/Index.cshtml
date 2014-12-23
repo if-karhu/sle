@@ -56,7 +56,7 @@
 
         @if (ViewBag.Exception != null) {
             <div id="error_message" style="color:peru">
-                <text>@ViewBag.Exception</text>
+                <text>@Html.Raw(ViewBag.Exception)</text>
             </div>
         }
         

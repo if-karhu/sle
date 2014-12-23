@@ -11,7 +11,7 @@ namespace Sle.Parser {
         public readonly int Position = -1;
         public readonly String Current;
         public LEParseException(String expected, int position, String current)
-            : base(expected += " is expected at " + position + " position but '" + current + "' is encouneterd." + graph(position)) {
+            : base(LEParser.m_input+": " + expected +" is expected at " + position + " position but '" + current + "' is encouneterd." + graph(position)) {
             Position = position;
             Current = current;
         }
@@ -24,12 +24,13 @@ namespace Sle.Parser {
 
         public static string graph(int pos) {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Environment.NewLine + LEParser.m_input);
-            sb.AppendLine();
+            sb.Append("<br/>");
             for (int i = 0; i < pos; i++) {
-                sb.Append(" ");
+                sb.Append(LEParser.m_input[i]);
             }
-            sb.Append("^");
+            sb.Append("<span style=\"color:red;font-weight: bold; font-style: italic; text-decoration: underline; \">"+
+                (pos >= LEParser.m_input.Length ? ' '  : LEParser.m_input[pos])
+                +"</span>");
             return sb.ToString();
         }
 
@@ -37,7 +38,7 @@ namespace Sle.Parser {
 
     public class LEParser {
 
-        private const string END_OF_LINE = "<EOL>";
+        private const string END_OF_LINE = "EOL";
         private const string DIGIT_LETER = "DIGIT OR LETTER";
         private const string SIGN = "SIGN";
         private const string AT_LEAST_ONE_LETTER_SIGN = "AT LEAST 1 LETTER OR SIGN";
