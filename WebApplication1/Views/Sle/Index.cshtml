@@ -50,15 +50,42 @@
                 @Html.Raw("</mtable>");
                 @Html.Raw("</math>");
               }
+              
+        <br/>
+        <br/>
+
+        @if (ViewBag.Exception != null) {
+            <div id="error_message" style="color:peru">
+                <text>@ViewBag.Exception</text>
+            </div>
+        }
         
+        @if (ViewBag.Solution != null) {
+            @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
+            int i = 0;
+            foreach (Tuple<String, double> res in ViewBag.Solution) {             
+                @Html.Raw("<mi>" + res.Item1 + "</mi>");
+                @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
+                @Html.Raw("<mn>" + res.Item2 + "</mn>");
+                if (i != (ViewBag.Solution.Count - 1)) {
+                    @Html.Raw("<mn>,</mn><mspace width=\"10px\" />");
+                }
+                i++;
+                                                       
+            }
+            @Html.Raw("</math>");
+        }
+
 </div>
     <div>
         <br />
         <br />
-        qweqwe
         @using (Html.BeginForm("Index","Sle",FormMethod.Post)){
-            <input type="text" name="parseMe"/>
+            <input type="text" name="parseMe" autocomplete="off" required/>
             <input type="submit" value="Add equation" />
+        }
+        @using (Html.BeginForm("Solve", "Sle", FormMethod.Post)) {          
+            <input type="submit" value="Solve" />
         }
 
     </div>

@@ -14,6 +14,10 @@ namespace Sle.Solver {
 
         // Gaussian elimination with partial pivoting
         public static double[] lsolve(double[][] A, double[] b) {
+            
+            
+            
+            
             int N = b.Length;
 
             for (int p = 0; p < N; p++) {

@@ -20,7 +20,7 @@ namespace Sle.Parser {
             : this(expected, position, new String(current, 1)) { }
 
         public LEParseException(String likeTerm)
-            : base("A like term " + likeTerm + " is encountered. You should combine like terms manually.") { }
+            : base(LEParser.m_input + ": a like term " + likeTerm + " is encountered. You should combine like terms manually.") { }
 
         public static string graph(int pos) {
             StringBuilder sb = new StringBuilder();
@@ -160,24 +160,6 @@ namespace Sle.Parser {
             }
             return chars;
 
-            //private T parseGroup<T>(string expected, Func<char, bool> charPredicate, Func<String, T> parseString,
-            //    bool atLeastOne, T defaultIfEmprty = default(T)) {
-            //    LinkedList<char> chars = new LinkedList<char>();
-            //    if (atLeastOne) {
-            //        char groupChar = peek(expected);
-            //        if (!charPredicate(groupChar)) {
-            //            throw new LEParseException(expected, POS, groupChar);
-            //        }
-            //        chars.AddLast(new LinkedListNode<char>(readNextChar()));
-            //    }
-            //    while (charPredicate(peek(expected))) {
-            //        chars.AddLast(new LinkedListNode<char>(readNextChar()));
-            //    }
-            //    if (chars.Count == 0) {
-            //        return defaultIfEmprty;
-            //    }
-            //    return parseString(new String(chars.ToArray<char>()));
-            //}
         }
 
 
@@ -188,7 +170,7 @@ namespace Sle.Parser {
         class Program {
             static void Main(string[] args) {
 
-                //  Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator = ".";
+                  Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator = ".";
                 //Console.SetWindowSize(100, 100);
 
                 Console.WriteLine(Double.Parse(".05"));
