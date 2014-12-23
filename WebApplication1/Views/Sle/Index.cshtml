@@ -87,6 +87,9 @@
         @using (Html.BeginForm("Solve", "Sle", FormMethod.Post)) {          
             <input type="submit" value="Solve" />
         }
+        @using (Html.BeginForm("Clear", "Sle", FormMethod.Post)) {
+            <input type="submit" value="Clear" />
+        }
 
     </div>
 </body>

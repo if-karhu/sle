@@ -89,5 +89,10 @@ namespace WebApplication1.Controllers
 
              return View("Index",sle);
         }
+
+        public ActionResult Clear() {
+            Session.Clear();
+            return View("Index", getSle());
+        }
     }
 }

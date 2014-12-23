@@ -14,10 +14,7 @@ namespace Sle.Solver {
 
         // Gaussian elimination with partial pivoting
         public static double[] lsolve(double[][] A, double[] b) {
-            
-            
-            
-            
+                       
             int N = b.Length;
 
             for (int p = 0; p < N; p++) {
@@ -58,25 +55,5 @@ namespace Sle.Solver {
             }
             return x;
         }
-
-
-        // sample client
-        public static void Main(String[] args) {
-            int N = 3;
-            double[][] A = new double[][] {new double[]{ 215, 57,  0 },
-                       new double[]  { 115, -4, 0 },
-                       new double[]  { 33, 113, 0 }
-                       };
-            double[] b = { 4, 2, 36 };
-            double[] x = lsolve(A, b);
-
-
-            // print results
-            for (int i = 0; i < N; i++) {
-                Console.WriteLine(x[i]);
-            }
-
-        }
-
     }
 }
