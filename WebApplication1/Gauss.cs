@@ -5,7 +5,8 @@ using System.Web;
 
 namespace Sle.Solver {
     public class SolverException : Exception {
-        public const String NO_OR_INFINITE = "The system has no or infinite number of solutions.";
+        public const string NO_OR_INFINITE = "The system has no or infinite number of solutions.";
+        public const string OVERDEFINED = "The system is overdefined (number of unknowns is less than the number of equations).";
         public SolverException(String message) : base(message) {  }
     }
 

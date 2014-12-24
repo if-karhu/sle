@@ -10,7 +10,8 @@ namespace WebApplication1.Controllers
 {
     public class SleController : Controller
     {
-        private const String SLE = "SLE";
+        private const string SLE = "SLE";
+        private const string INDEX = "Index";
 
         private LinkedList<Tuple<SortedDictionary<String, double>, double>> getSle() {
             if (Session.Count == 0) {
@@ -19,23 +20,19 @@ namespace WebApplication1.Controllers
             return Session[SLE] as LinkedList<Tuple<SortedDictionary<String, double>, double>>;
         }
 
-
         private void addEquation(Tuple<SortedDictionary<String, double>, double> newEquation) {
             var sle = getSle();
             if (sle.Count == 0){
                 sle.AddLast(newEquation);
                 return;
-            }
-            
+            }            
             var newForAll = newEquation.Item1.Keys.Except(sle.First.Value.Item1.Keys).ToList();
             var allForNew = sle.First.Value.Item1.Keys.Except(newEquation.Item1.Keys).ToList();
             sle.ToList().ForEach(x => newForAll.ForEach(s => x.Item1.Add(s, 0d)));
             allForNew.ForEach(t => newEquation.Item1.Add(t, 0d));           
-            sle.AddLast(newEquation);
-                 
+            sle.AddLast(newEquation);                
         }
 
-        // GET: http://localhost:49168/Sle?parseMe=2n%3D3
         public  ActionResult Index(String parseMe)
         {
             if (String.IsNullOrEmpty(parseMe)) {
@@ -43,13 +40,10 @@ namespace WebApplication1.Controllers
             }
             try { 
                 var parsed = LEParser.parse(parseMe);
-                addEquation(parsed);
-                
-
+                addEquation(parsed);              
             } catch (LEParseException e) {
                 ViewBag.Exception = e.Message;
             }
-
             return View(getSle()); 
         }
 
@@ -57,12 +51,12 @@ namespace WebApplication1.Controllers
             var sle = getSle();
             if (sle.Count == 0) {
                 ViewBag.Exception = "No equations";
-                return View("Index",sle);
+                return View(INDEX,sle);
             }
 
             if (sle.Count < sle.First.Value.Item1.Count) {
                 ViewBag.Exception = SolverException.NO_OR_INFINITE;
-                return View("Index",sle);
+                return View(INDEX, sle);
             }
 
             var arr = new double[sle.Count][];
@@ -79,20 +73,24 @@ namespace WebApplication1.Controllers
                 i++;
             }
 
+            if (arr[0].Length < free.Length) {
+                ViewBag.Exception = SolverException.OVERDEFINED;
+                return View(INDEX, sle);
+            }
+
             try {
-                var res = GaussianElimination.lsolve(arr, free);
-                //AAAAAAAAAAAWESOME!!!!111ONE
+                var res = GaussianElimination.lsolve(arr, free);             
                 ViewBag.Solution = sle.First.Value.Item1.Keys.Zip(res, (name, result) => Tuple.Create(name, result)).ToList();
             } catch (SolverException e) {
                 ViewBag.Exception = SolverException.NO_OR_INFINITE;
             }
 
-             return View("Index",sle);
+            return View(INDEX, sle);
         }
 
         public ActionResult Clear() {
             Session.Clear();
-            return View("Index", getSle());
+            return View(INDEX, getSle());
         }
     }
 }

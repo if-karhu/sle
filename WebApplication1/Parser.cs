@@ -43,6 +43,9 @@ namespace Sle.Parser {
         private const string SIGN = "SIGN";
         private const string AT_LEAST_ONE_LETTER_SIGN = "AT LEAST 1 LETTER OR SIGN";
         private const char DOT = '.';
+        private const char PLUS = '+';
+        private const char MINUS = '-';
+        private const char EQUALS = '=';
 
         private static IDictionary<String, double> m_terms = new Dictionary<String, double>();
         private static bool m_EOLIsOk = false;
@@ -56,8 +59,8 @@ namespace Sle.Parser {
 
         private static bool tryParseSign(char signChar, out double sign) {
             sign = 1;
-            if (signChar == '+' || signChar == '-') {
-                if (signChar == '-') {
+            if (signChar == PLUS || signChar == MINUS) {
+                if (signChar == MINUS) {
                     sign = -1;
                 }
                 readNextChar();
@@ -98,7 +101,7 @@ namespace Sle.Parser {
         public static Tuple<SortedDictionary<String, double>, double> parse(String input) {
             init(input);
             skipWs();
-            while (peek("=") != '=') {
+            while (peek("=") != EQUALS) {
                 addTerm(parseTerm());
                 skipWs();
             }
@@ -112,10 +115,7 @@ namespace Sle.Parser {
 
         private static Tuple<double, String> parseTerm() {
             double coefficient;
-            coefficient = parseCoefficient(canSkipSign: m_terms.Count == 0, atLeastOne: false, oneIfEmpty: true);
-            if (coefficient == 0) {
-                //TODO exception or ignore ?
-            }
+            coefficient = parseCoefficient(canSkipSign: m_terms.Count == 0, atLeastOne: false, oneIfEmpty: true);          
             var name = parseName();
             return new Tuple<double, string>(coefficient, name);
         }
@@ -160,47 +160,6 @@ namespace Sle.Parser {
                 chars.AddLast(readNextChar());
             }
             return chars;
-
-        }
-
-
-
-
-
-
-        class Program {
-            static void Main(string[] args) {
-
-                  Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator = ".";
-                //Console.SetWindowSize(100, 100);
-
-                Console.WriteLine(Double.Parse(".05"));
-
-
-                while (true) {
-                    var tokenizer = new LEParser();
-                    Console.WriteLine("in");
-
-
-
-                    try {
-                        var result = LEParser.parse(Console.ReadLine());
-                        foreach (var cur in result.Item1.Keys) {
-                            Console.Write(result.Item1[cur] + cur);
-                            Console.Write(" ");
-                        }
-                        Console.WriteLine("free: " + result.Item2);
-                    } catch (Exception e) {
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine(e.StackTrace);
-                    }
-                }
-
-                // GaussianElimination.main(null);
-
-                Console.ReadLine();
-
-            }
-        }
+        }       
     }
 }
