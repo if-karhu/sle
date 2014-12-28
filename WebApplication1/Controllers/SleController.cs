@@ -47,6 +47,19 @@ namespace WebApplication1.Controllers
             return View(getSle()); 
         }
 
+        string ok = "<img src=\"/Content/Icons/ok.svg\"/>";
+        string no = "<img src=\"/Content/Icons/no.svg\"/>";
+
+        public string parse(string parseme) {
+            try {
+                LEParser.parse(parseme);
+                return ok;
+            } catch (LEParseException e) {
+                return no;
+            }
+        }
+
+
         public ActionResult Solve() {
             var sle = getSle();
             if (sle.Count == 0) {
