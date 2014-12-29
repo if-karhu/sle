@@ -1,7 +1,17 @@
 ﻿$(function () {
     $(".display").click(function () {
-        $(this).hide().siblings(".edit").show().val($(this).text()).focus();
+        $(this).parent().children("img").remove();
+        $(this).hide().siblings(".edit").show().val($(this).text()).focus();      
     });
+
+    $('.display').bind('contextmenu', function (e) {
+        var root = $(this).parent().parent();
+        if (root.children().size() > 1) {
+            $(this).parent().remove();
+        }
+        return false;
+    })
+
 
     $(".edit").focusout(function () {
         // alert("out " +$(this).val());
@@ -30,7 +40,7 @@
         })
         .success(function (result) {
             li.children("img").remove();
-            li.append(result);
+            li.prepend(result);
         })
         .error(function (xhr, status) {
             alert(status);
@@ -49,6 +59,7 @@
                 var clone = $(this).parent().clone(true);
                 clone.children(".edit").val("");
                 clone.children(".display").text("");
+                clone.children("img").remove();
                 $(this).parent().parent().append(clone);
                 nextLi = $(this).parent().next();
             }
