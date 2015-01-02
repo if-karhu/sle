@@ -16,6 +16,7 @@
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
     <script type="text/javascript" src="~/Scripts/App/Js.js" ></script>
+    <script type="text/javascript" src="~/Scripts/App/jquery.tooltipster.js"></script>
     <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" /> 
 
 
@@ -63,11 +64,7 @@
         <br/>
         <br/>
 
-        @if (ViewBag.Exception != null) {
-            <div id="error_message" style="color:peru">
-                <text>@Html.Raw(ViewBag.Exception)</text>
-            </div>
-        }
+      
         
         @if (ViewBag.Solution != null) {
             @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
@@ -86,31 +83,21 @@
         }
 
 </div>
-    <div>
-        <br />
-       
-        <br />
-        @using (Html.BeginForm("Index","Sle",FormMethod.Post)){
-            <input type="text" name="parseMe" autocomplete="off" required/>
-            <input type="submit" value="Add equation" />
-        }
-        @using (Html.BeginForm("Solve", "Sle", FormMethod.Post)) {          
-            <input type="submit" value="Solve" />
-        }
-        @using (Html.BeginForm("Clear", "Sle", FormMethod.Post)) {
-            <input type="submit" value="Clear" />
-        }
+   <div>
+        <div class="left">
+            <ul style="list-style-type: none" id="equations">              
+            </ul>
+            <div class="append">
+                Add an equation
+            </div>
+        </div>
 
+        <div id="output" class="right">
+           
+        </div>
     </div>
-
-    <div>
-        <ul style="list-style-type: none">
-            <li>
-                <span class="display">Enter</span>
-                <input type="text" class="edit" style="display:none" />                
-            </li>          
-        </ul>
-    </div>
+   
+   
 
 
 </body>

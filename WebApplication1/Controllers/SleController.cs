@@ -47,18 +47,22 @@ namespace WebApplication1.Controllers
             return View(getSle()); 
         }
 
-        string ok = "<img src=\"/Content/Icons/ok.svg\"/>";
-        string no = "<img src=\"/Content/Icons/no.svg\"/>";
+        string ok = "<img src=\"/Content/Icons/ok.png\"/>";
+        string no = "<img src=\"/Content/Icons/no.png\"/>";
+        string info = "&nbsp;<img class=\"info\" src=\"/Content/Icons/info.png\" />";
 
         public string parse(string parseme) {
             try {
                 LEParser.parse(parseme);
                 return ok;
             } catch (LEParseException e) {
-                return no;
+                return no + "|"+ info  +"|" + e.Message;
             }
         }
 
+        public string solve(string[] equations) {
+            return null;
+        }
 
         public ActionResult Solve() {
             var sle = getSle();

@@ -121,9 +121,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\style.css" />
-    <Content Include="Content\Icons\info.svg" />
-    <Content Include="Content\Icons\no.svg" />
-    <Content Include="Content\Icons\ok.svg" />
+    <Content Include="Content\Icons\err.png" />
+    <Content Include="Content\Icons\info.png" />
+    <Content Include="Content\Icons\no.png" />
+    <Content Include="Content\Icons\ok.png" />
     <Content Include="Content\Icons\progress.GIF" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
