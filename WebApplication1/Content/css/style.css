@@ -5,6 +5,10 @@
     
 }
 
+.display:hover {
+   color:#E6B800;
+}
+
 .error {
 
 }
@@ -46,4 +50,9 @@
 
 li{
     margin: 10px 0;
+}
+
+.solveBtn {
+    position:absolute;
+
 }

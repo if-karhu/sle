@@ -60,7 +60,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public string solve(string[] equations) {
+        public string SolveAjax(string[] equations) {
             return null;
         }
 

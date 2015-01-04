@@ -126,6 +126,8 @@
     <Content Include="Content\Icons\no.png" />
     <Content Include="Content\Icons\ok.png" />
     <Content Include="Content\Icons\progress.GIF" />
+    <Content Include="Content\Icons\solve.png" />
+    <Content Include="Content\Icons\solve_disabled.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

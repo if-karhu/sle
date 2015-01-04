@@ -1,4 +1,37 @@
 ﻿$(function () {
+ 
+    $(document).ready(function () {
+        var btnSolve = $("<img id=\"solve\" class=\"solveBtn\" src=\"/Content/Icons/solve_disabled.png\" />");
+        btnSolve.css({
+            left: Math.floor(window.innerWidth / 2) + "px",
+            top: Math.floor(window.innerHeight / 2) + "px"
+        });
+        btnSolve.prop('disabled', true);
+        $(document.body).append(btnSolve);
+    });
+
+    $(document).on("click",".solveBtn",function ()  {
+        var equationsAr = [];
+        $("#equations").children().each(function () {equationsAr.push($(this).children(".display").text()) });
+        
+        $.ajax({
+            url: '/Sle/SolveAjax',
+            type: 'POST',
+            data: {equations: equationsAr},
+            dataType: 'json',
+            traditional:true 
+        })
+       .success(function (result) {
+           
+
+       })
+       .error(function (xhr, status) {
+           alert(status);
+       })
+    });
+
+
+
     $(document).on('click',".append",function () {
         var newLi = $("<li></li>");
         newLi.append("<span class=\"display\" ></span>");
@@ -6,7 +39,6 @@
         $("#equations").append(newLi);
        newLi.children(".edit").focus();
     });
-
 
     $(document).on('click', ".display", function () {      
         $(this).parent().children("img").remove();
@@ -49,6 +81,10 @@
         $(this).hide().siblings(".display").show().text($(this).val());
         $(this).hide().siblings("img").remove();
         li.append("<img src=/Content/Icons/progress.GIF>");
+
+        $("#solve").prop('disabled', true);
+        $('#solve').attr('src', '/Content/Icons/solve_disabled.png');
+
         $.ajax({
             url: '/Sle/Parse',
             contentType: 'application/html; charset=utf-8',
@@ -65,14 +101,20 @@
                 li.attr("info", res[2]);
             } else {
                 li.prepend(res[0]);
+                if ($(".info").length === 0) {
+                    $("#solve").prop('disabled', false);
+                    $('#solve').attr('src', '/Content/Icons/solve.png');
+
+                }
+
+
             }
+
            
         })
         .error(function (xhr, status) {
             alert(status);
         })
-
-
     });
 
     $(document).on("keypress",'.edit',function (e) {

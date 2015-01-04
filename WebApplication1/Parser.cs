@@ -101,6 +101,7 @@ namespace Sle.Parser {
         public static Tuple<SortedDictionary<String, double>, double> parse(String input) {
             init(input);
             skipWs();
+            //TODO fix if string starts with equals
             while (peek("=") != EQUALS) {
                 addTerm(parseTerm());
                 skipWs();
