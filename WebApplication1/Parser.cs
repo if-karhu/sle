@@ -47,6 +47,8 @@ namespace Sle.Parser {
         private const char MINUS = '-';
         private const char EQUALS = '=';
 
+
+        private static StringBuilder m_mathMl = new StringBuilder();
         private static IDictionary<String, double> m_terms = new Dictionary<String, double>();
         private static bool m_EOLIsOk = false;
         public static String m_input; //TODO change to private instance
@@ -61,9 +63,11 @@ namespace Sle.Parser {
             sign = 1;
             if (signChar == PLUS || signChar == MINUS) {
                 if (signChar == MINUS) {
-                    sign = -1;
+                    sign = -1;                  
                 }
+               
                 readNextChar();
+                writeSign(signChar == PLUS);
                 return true;
             }
             return false;
@@ -96,10 +100,54 @@ namespace Sle.Parser {
             POS = 0; m_EOLIsOk = false;
             m_input = input;
             m_terms.Clear();
+            m_mathMl.Clear();
         }
 
-        public static Tuple<SortedDictionary<String, double>, double> parse(String input) {
+        private static string ML_PLUS = "<mo>&#43;<!--PLUS--></mo>";
+        private static string ML_MINUS = "<mo>&#45;<!--MINU--></mo>";
+        private static string ML_EQUALS = "<mo>&#61;<!--EQUALS--></mo>";
+        private static string ML_NAME_OPEN = "<mn>";
+        private static string ML_NAME_CLOSE = "</mn>";
+        private static string ML_NUMBER_OPEN = "<mi>";
+        private static string ML_NUMBER_CLOSE = "</mi>";
+        private static string ML_START = "<mtr><mtd>";
+        private static string ML_END = "</mtr></mtd>";
+
+        private static void writeStart() {
+            m_mathMl.Append(ML_START);
+        }
+
+        private static string getMathMl() {
+            return m_mathMl.ToString();
+        }
+
+        private static void writeEnd() {
+            m_mathMl.Append(ML_END);
+        }
+
+        private static void writeSign(bool plus) {           
+            m_mathMl.Append(plus ? ML_PLUS : ML_MINUS);
+        }
+
+        private static void writeNumber(double number) {
+            m_mathMl.Append(ML_NUMBER_OPEN);
+            m_mathMl.Append(Math.Abs(number));
+            m_mathMl.Append(ML_NUMBER_CLOSE);
+        }
+
+        private static void writeName(string name) {
+            m_mathMl.Append(ML_NAME_OPEN);
+            m_mathMl.Append(name);
+            m_mathMl.Append(ML_NAME_CLOSE);
+        }
+
+        private static void writeEquals() {
+            m_mathMl.Append(ML_EQUALS);
+        }
+
+        public static Tuple<SortedDictionary<String, double>, double> parse(string input, ref string mathMl) {
             init(input);
+            writeStart();
             skipWs();
             //TODO fix if string starts with equals
             while (peek("=") != EQUALS) {
@@ -107,9 +155,13 @@ namespace Sle.Parser {
                 skipWs();
             }
             readNextChar();// read '='
+            writeEquals();
             skipWs();
             m_EOLIsOk = true;
             double free = parseCoefficient(canSkipSign: true,atLeastOne: true,oneIfEmpty: false);
+           
+            writeEnd();
+            mathMl = getMathMl();
             //TODO we can have extra unparsed characters at the end of input           
             return new Tuple<SortedDictionary<string, double>, double>(new SortedDictionary<String, double> (m_terms), free);
         }
@@ -138,6 +190,9 @@ namespace Sle.Parser {
                         coefficient += Double.Parse(new String(chars.ToArray<char>()));
                     }
                 }
+                if (chars.Count != 0) {
+                    writeNumber(coefficient);
+                }
                 return sign * coefficient;
             } else {
                 throw new LEParseException(SIGN, POS, signChar);
@@ -145,7 +200,9 @@ namespace Sle.Parser {
         }
 
         private static string parseName() {
-            return new String(parseGroup(AT_LEAST_ONE_LETTER_SIGN, Char.IsLetter, atLeastOne: true).ToArray<char>());
+            var name = new String(parseGroup(AT_LEAST_ONE_LETTER_SIGN, Char.IsLetter, atLeastOne: true).ToArray<char>());
+            writeName(name);
+            return name;
         }
 
         private static LinkedList<char> parseGroup(string expected, Func<char, bool> charPredicate, bool atLeastOne) {

@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
                 return View(getSle());
             }
             try { 
-                var parsed = LEParser.parse(parseMe);
+                var parsed = LEParser.parse(parseMe, ref parseMe);
                 addEquation(parsed);              
             } catch (LEParseException e) {
                 ViewBag.Exception = e.Message;
@@ -47,13 +47,14 @@ namespace WebApplication1.Controllers
             return View(getSle()); 
         }
 
+  
         string ok = "<img src=\"/Content/Icons/ok.png\"/>";
         string no = "<img src=\"/Content/Icons/no.png\"/>";
         string info = "&nbsp;<img class=\"info\" src=\"/Content/Icons/info.png\" />";
 
         public string parse(string parseme) {
             try {
-                LEParser.parse(parseme);
+                LEParser.parse(parseme,ref parseme);
                 return ok;
             } catch (LEParseException e) {
                 return no + "|"+ info  +"|" + e.Message;
@@ -61,7 +62,11 @@ namespace WebApplication1.Controllers
         }
 
         public string SolveAjax(string[] equations) {
-            return null;
+            for (int i = 0; i < equations.Length; i++) {
+                addEquation(LEParser.parse(equations[i], ref equations[i]));
+            }
+
+                return String.Join(String.Empty,equations);
         }
 
         public ActionResult Solve() {

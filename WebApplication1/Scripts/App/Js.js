@@ -18,15 +18,24 @@
             url: '/Sle/SolveAjax',
             type: 'POST',
             data: {equations: equationsAr},
-            dataType: 'json',
+            dataType: 'html',
             traditional:true 
         })
        .success(function (result) {
-           
 
+           $("#output").empty();
+           
+           $("#output").append("<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mo>&#123;</mo>   <!--FUCK-->  <mtable>"
+               + result + "</mtable></math>");
+          // alert($("#output").html());
+          // MathJax.Hub.Typeset();
+           MathJax.Hub.Queue(["Typeset", MathJax.Hub, $("#output")[0]]);
+
+        //   var math = MathJax.Hub.getAllJax("output")[0];
+          // MathJax.Hub.Queue(["Text", math,result]);
        })
-       .error(function (xhr, status) {
-           alert(status);
+       .error(function (jqXHR, textStatus, errorThrown) {
+           alert("jqXHR: " + jqXHR.status + "\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
        })
     });
 

@@ -31,34 +31,34 @@
         </p>
 
       @if (Model.Count > 0){
-            @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
-            @Html.Raw("<mo>&#123;</mo>   <!--curly brace-->  <mtable>");
+          //  @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
+          //  @Html.Raw("<mo>&#123;</mo>   <!--curly brace-->  <mtable>");
             }
             @foreach (Tuple<SortedDictionary<String, double>, double> equation in Model) {  
-                @Html.Raw("<mtr><mtd>");
+              //  @Html.Raw("<mtr><mtd>");
                 bool emitFirstSign = true;
                 foreach (KeyValuePair<string, double> kv in equation.Item1) {
                              if (kv.Value >= 0) {
                                 if (!emitFirstSign){
-                                    @Html.Raw("<mo>&#43;<!--PLUS--></mo>");
+                          //          @Html.Raw("<mo>&#43;<!--PLUS--></mo>");
                                 }
                              } else {
                                 @Html.Raw("<mo>&#45;<!--MINU--></mo>");
                              }
                              emitFirstSign = false;
-                             @Html.Raw("<mn>" + (Math.Abs(kv.Value)) + "</mn>");
-                             @Html.Raw("<mi>" + kv.Key + "</mi>");
+                         //    @Html.Raw("<mn>" + (Math.Abs(kv.Value)) + "</mn>");
+                       //      @Html.Raw("<mi>" + kv.Key + "</mi>");
                             }
 
-                @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
-                @Html.Raw("<mn>" + (equation.Item2) + "</mn>");
-                @Html.Raw("</mtr></mtd>");
+             //   @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
+          //      @Html.Raw("<mn>" + (equation.Item2) + "</mn>");
+            //    @Html.Raw("</mtr></mtd>");
                         }
             
             
             @if (Model.Count > 0){
-                @Html.Raw("</mtable>");
-                @Html.Raw("</math>");
+             //   @Html.Raw("</mtable>");
+           //     @Html.Raw("</math>");
               }
               
         <br/>
@@ -67,19 +67,19 @@
       
         
         @if (ViewBag.Solution != null) {
-            @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
+         //   @Html.Raw("<math xmlns=\"http://www.w3.org/1998/Math/MathML\">");
             int i = 0;
             foreach (Tuple<String, double> res in ViewBag.Solution) {             
-                @Html.Raw("<mi>" + res.Item1 + "</mi>");
-                @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
-                @Html.Raw("<mn>" + res.Item2 + "</mn>");
+             //   @Html.Raw("<mi>" + res.Item1 + "</mi>");
+            //    @Html.Raw("<mo>&#61;<!--EQUAL--></mo>");
+           //     @Html.Raw("<mn>" + res.Item2 + "</mn>");
                 if (i != (ViewBag.Solution.Count - 1)) {
-                    @Html.Raw("<mn>,</mn><mspace width=\"10px\" />");
+               //     @Html.Raw("<mn>,</mn><mspace width=\"10px\" />");
                 }
                 i++;
                                                        
             }
-            @Html.Raw("</math>");
+       //     @Html.Raw("</math>");
         }
 
 </div>
