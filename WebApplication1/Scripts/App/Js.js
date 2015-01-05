@@ -22,11 +22,13 @@
             traditional:true 
         })
        .success(function (result) {
+           var output_solution = result.split("|");
 
            $("#output").empty();
-           
-           $("#output").append("<math xmlns=\"http://www.w3.org/1998/Math/MathML\"><mo>&#123;</mo>   <!--FUCK-->  <mtable>"
-               + result + "</mtable></math>");
+           $("#output").append(output_solution[0]);
+
+           $("#output").append("<br/>");
+           $("#output").append(output_solution[1]);
           // alert($("#output").html());
           // MathJax.Hub.Typeset();
            MathJax.Hub.Queue(["Typeset", MathJax.Hub, $("#output")[0]]);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Sle;
 using Sle.Parser;
 using Sle.Solver;
 
@@ -51,7 +52,6 @@ namespace WebApplication1.Controllers
         string ok = "<img src=\"/Content/Icons/ok.png\"/>";
         string no = "<img src=\"/Content/Icons/no.png\"/>";
         string info = "&nbsp;<img class=\"info\" src=\"/Content/Icons/info.png\" />";
-
         public string parse(string parseme) {
             try {
                 LEParser.parse(parseme,ref parseme);
@@ -62,23 +62,43 @@ namespace WebApplication1.Controllers
         }
 
         public string SolveAjax(string[] equations) {
+            Clear();
             for (int i = 0; i < equations.Length; i++) {
                 addEquation(LEParser.parse(equations[i], ref equations[i]));
             }
+            var input = String.Join(String.Empty, equations);
+            string output = null;
+            List<String> solutions = new List<string>();
+            try {
+                var res = Solve();                
+                foreach (var ans in res){
+                    MathMlWriter.init();
+                    MathMlWriter.writeStart();
+                    MathMlWriter.writeName(ans.Item1);
+                    MathMlWriter.writeEquals();
+                    if (ans.Item2 < 0) {
+                        MathMlWriter.writeSign(false);
+                    }
+                    MathMlWriter.writeNumber(ans.Item2);
+                    MathMlWriter.writeEnd();
+                    solutions.Add(MathMlWriter.getMathMl());
+                }
+                output = MathMlWriter.wrapInTable(String.Join("", solutions));
 
-                return String.Join(String.Empty,equations);
+            } catch (SolverException ex) {
+                output = ex.Message;
+            }
+            return MathMlWriter.wrapInTable(String.Join(String.Empty,equations)) + "|" + output;
         }
 
-        public ActionResult Solve() {
+        public List<Tuple<string, double>> Solve() {
             var sle = getSle();
             if (sle.Count == 0) {
-                ViewBag.Exception = "No equations";
-                return View(INDEX,sle);
+                throw new SolverException(SolverException.NO_EQUATIONS);
             }
 
             if (sle.Count < sle.First.Value.Item1.Count) {
-                ViewBag.Exception = SolverException.NO_OR_INFINITE;
-                return View(INDEX, sle);
+                throw new SolverException(SolverException.NO_OR_INFINITE);
             }
 
             var arr = new double[sle.Count][];
@@ -96,18 +116,17 @@ namespace WebApplication1.Controllers
             }
 
             if (arr[0].Length < free.Length) {
-                ViewBag.Exception = SolverException.OVERDEFINED;
-                return View(INDEX, sle);
+                throw new SolverException(SolverException.OVERDEFINED);
             }
 
             try {
                 var res = GaussianElimination.lsolve(arr, free);             
-                ViewBag.Solution = sle.First.Value.Item1.Keys.Zip(res, (name, result) => Tuple.Create(name, result)).ToList();
+                return sle.First.Value.Item1.Keys.Zip(res, (name, result) => Tuple.Create(name, result)).ToList();
             } catch (SolverException e) {
-                ViewBag.Exception = SolverException.NO_OR_INFINITE;
+                throw e;
             }
 
-            return View(INDEX, sle);
+          
         }
 
         public ActionResult Clear() {
