@@ -3,11 +3,18 @@
     $(document).ready(function () {
         var btnSolve = $("<img id=\"solve\" class=\"solveBtn\" src=\"/Content/Icons/solve_disabled.png\" />");
         btnSolve.css({
-            left: Math.floor(window.innerWidth / 2) + "px",
-            top: Math.floor(window.innerHeight / 2) + "px"
+            left: Math.floor($(".append").offset().left + $(".append").width() + 20) + "px",
+            top: Math.floor($(".append").offset().top ) + "px"
         });
         btnSolve.prop('disabled', true);
         $(document.body).append(btnSolve);
+    });
+
+    $(document).on("resize", "#equations", function () {
+        $(".solveBtn").css({
+            left: Math.floor($(this).offset().left + $(".append").width() + 20) + "px",
+            top: Math.floor($(this).offset().top + ($(this).height()/2) ) + "px"
+        });
     });
 
     $(document).on("click",".solveBtn",function ()  {
@@ -27,6 +34,8 @@
            $("#output").empty();
            $("#output").append(output_solution[0]);
 
+           $("#output").append("<br/>");
+           $("#output").append("<br/>");
            $("#output").append("<br/>");
            $("#output").append(output_solution[1]);
           // alert($("#output").html());
@@ -48,7 +57,8 @@
         newLi.append("<span class=\"display\" ></span>");
         newLi.append("<input type=\"text\" class=\"edit\" />");
         $("#equations").append(newLi);
-       newLi.children(".edit").focus();
+        newLi.children(".edit").focus();
+        $("#equations").trigger("resize");
     });
 
     $(document).on('click', ".display", function () {      
@@ -57,7 +67,8 @@
     });
 
     $(document).on('contextmenu', '.display',function (e) {
-        $(this).parent().remove();       
+        $(this).parent().remove();
+        $("#equations").trigger("resize");
         return false;
     })
 
@@ -115,13 +126,8 @@
                 if ($(".info").length === 0) {
                     $("#solve").prop('disabled', false);
                     $('#solve').attr('src', '/Content/Icons/solve.png');
-
                 }
-
-
-            }
-
-           
+            }          
         })
         .error(function (xhr, status) {
             alert(status);
@@ -141,6 +147,7 @@
                 clone.children("img").remove();
                 $(this).parent().parent().append(clone);
                 nextLi = $(this).parent().next();
+                $("#equations").trigger("resize");
             }
             var nextText = nextLi.children(".edit").first();
             var nextDisplay = nextLi.children(".display").first();
