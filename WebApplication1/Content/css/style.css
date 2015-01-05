@@ -47,6 +47,19 @@
   background-color: #FFCC00;        
 }
 
+.clear {
+    width:200px;
+    height:50px;
+    line-height:50px;
+    background-color:#E6B800;
+    text-align:center;
+}
+
+.clear:hover {
+    border: 1px solid #99CCFF;     
+    background-color: #FFCC00;     
+}
+
 li{
     margin: 10px 0;
 }

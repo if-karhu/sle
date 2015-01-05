@@ -11,12 +11,10 @@
 <html>
 <head>
     <script src="~/Scripts/jquery-2.1.1.js"></script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
     <script type="text/javascript" src="~/Scripts/App/Js.js" ></script>
-    <script type="text/javascript" src="~/Scripts/App/jquery.tooltipster.js"></script>
     <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" /> 
 
 
@@ -26,11 +24,28 @@
 <body>
 
    <div>
+       <p>
+           Input format: d1X1 + d2X2 + ... + dnXn = f  where d1..dn - coefficients, X1..Xn - unknown names (digits are not allowed), f - constant term.<br />
+           Any whitespace character will be ignored while parsing. <br />
+           Sample: -x + 3.14y+ 0z =0.123
+       </p>
+       <p>
+           <i>
+           *)Click the button to add an equation (you can hit ENTER when finished to add another one) <br>
+           *)You can edit any equation - just left-click it! <br>
+           *)You can remove any equation - hit the equation text with right click. <br>
+           *)To see the solution - click the green arrow. <br>
+           </i>
+       </p>
         <div class="left">
             <ul style="list-style-type: none" id="equations">              
             </ul>
-            <div class="append">
+            <div class="append" id="appendButton">
                 Add an equation
+            </div>
+            <br/>
+            <div class="clear" id="clearButton">
+                Clear
             </div>
         </div>
 
