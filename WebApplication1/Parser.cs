@@ -21,7 +21,7 @@ namespace Sle.Parser {
 
         public LEParseException(String likeTerm)
             : base(LEParser.m_input + ": a like term " + likeTerm + " is encountered. You should combine like terms manually.") { }
-
+      
         public static string graph(int pos) {
             StringBuilder sb = new StringBuilder();
             sb.Append("<br/>");
@@ -107,6 +107,9 @@ namespace Sle.Parser {
             init(input);
             MathMlWriter.writeStart();
             skipWs();
+            if (peek("=") == EQUALS) {
+                throw new LEParseException(DIGIT_LETER, POS, EQUALS);
+            }  
             //TODO fix if string starts with equals
             while (peek("=") != EQUALS) {
                 addTerm(parseTerm());
